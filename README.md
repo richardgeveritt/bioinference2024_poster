@@ -37,4 +37,4 @@ The results for the poster were generated using different values for the paramet
 
 The code is set up in such a way that it is possible for a user to also use the methods on alternative models. Although these files only show examples of specifying the models in C++, it is also possible to specify the model in R, python or Julia. The likelihood estimates can also be embedded in other algorithms, such as MCMC (which can also be run from the ilike package), but no examples of this are provided in the poster.
 
-Examples of the new iEnKI-ABC likelihood estimator can be found [in this video illustrating the method for a parameter with large likelihood](https://youtu.be/nERovsRTDzI) and [in this video for a parameter with a small likelihood](https://youtu.be/VCgqGTVcnRg).
+Examples of the new iEnKI-ABC likelihood estimator can be found [in this video illustrating the method for a parameter with large likelihood](https://youtu.be/nERovsRTDzI) and [in this video for a parameter with a small likelihood](https://youtu.be/VCgqGTVcnRg). These videos will be linked to via QR codes on the poster.
