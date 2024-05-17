@@ -1,0 +1,105 @@
+#include "LV_step.h"
+
+/***data***/
+Data data()
+{
+  
+  arma::mat X(16,2);
+  X(0,0) = 50;
+  X(1,0) = 145;
+  X(2,0) = 265;
+  X(3,0) = 64;
+  X(4,0) = 35;
+  X(5,0) = 52;
+  X(6,0) = 201;
+  X(7,0) = 305;
+  X(8,0) = 26;
+  X(9,0) = 19;
+  X(10,0) = 90;
+  X(11,0) = 334;
+  X(12,0) = 61;
+  X(13,0) = 15;
+  X(14,0) = 24;
+  X(15,0) = 145;
+  
+  X(0,1) = 100;
+  X(1,1) = 93;
+  X(2,1) = 248;
+  X(3,1) = 341;
+  X(4,1) = 166;
+  X(5,1) = 79;
+  X(6,1) = 54;
+  X(7,1) = 331;
+  X(8,1) = 364;
+  X(9,1) = 129;
+  X(10,1) = 50;
+  X(11,1) = 137;
+  X(12,1) = 508;
+  X(13,1) = 194;
+  X(14,1) = 65;
+  X(15,1) = 40;
+  
+  Data data;
+  data["X"] = X;
+  return data;
+}
+
+/***evaluate_log_prior***/
+double evaluate_log_prior(const Parameters &parameters)
+{
+  return 0.0;
+}
+
+/***simulate_prior***/
+Parameters simulate_prior(RandomNumberGenerator &rng)
+{
+  arma::colvec theta(3);
+  theta[0] = 1.0;
+  theta[1] = 0.005;
+  theta[2] = 0.6;
+  return Parameters("θ",theta);
+}
+
+/***simulate_data_model***/
+Data simulate_data_model(RandomNumberGenerator &rng,
+                    const Parameters &parameters)
+{
+  arma::colvec theta = parameters["θ"];
+  
+  arma::mat X(16,2);
+  X(0,0) = 50.0;
+  X(0,1) = 100.0;
+  double t = 0.0;
+  double dt = parameters["dt"][0];
+  
+  for (size_t i=1; i<16; ++i)
+  {
+    arma::colvec next = my_stepLVc(rng,
+                                   X(i-1,0),
+                                   X(i-1,1),
+                                   theta,
+                                   t,
+                                   dt);
+    
+    t = t + dt;
+    X(i,0) = next[0];
+    X(i,1) = next[1];
+  }
+  
+  Data output;
+  output["X"] = X;
+  return output;
+}
+
+// Arguments are:
+// number of simulations from the likelihood (given as an argument in R)
+// name of tolerance variable
+// tolerance (given as an argument in R)
+// parallel simulation set to false
+/***sbi_likelihood,ilike::gaussian_abc(p1,ε,p2,false)***/
+
+/***data_variable***/
+std::string simulated_variable()
+{
+  return "X";
+}

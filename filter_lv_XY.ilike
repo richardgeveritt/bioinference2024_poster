@@ -1,0 +1,129 @@
+#include "LV_step.h"
+
+/***data***/
+Data data()
+{
+  arma::mat X(16,2);
+  X(0,0) = 50;
+  X(1,0) = 145;
+  X(2,0) = 265;
+  X(3,0) = 64;
+  X(4,0) = 35;
+  X(5,0) = 52;
+  X(6,0) = 201;
+  X(7,0) = 305;
+  X(8,0) = 26;
+  X(9,0) = 19;
+  X(10,0) = 90;
+  X(11,0) = 334;
+  X(12,0) = 61;
+  X(13,0) = 15;
+  X(14,0) = 24;
+  X(15,0) = 145;
+  
+  X(0,1) = 100;
+  X(1,1) = 93;
+  X(2,1) = 248;
+  X(3,1) = 341;
+  X(4,1) = 166;
+  X(5,1) = 79;
+  X(6,1) = 54;
+  X(7,1) = 331;
+  X(8,1) = 364;
+  X(9,1) = 129;
+  X(10,1) = 50;
+  X(11,1) = 137;
+  X(12,1) = 508;
+  X(13,1) = 194;
+  X(14,1) = 65;
+  X(15,1) = 40;
+  
+  Data data;
+  data["X"] = X;
+  return data;
+}
+
+/***evaluate_log_prior***/
+double evaluate_log_prior(const Parameters &parameters)
+{
+  return 0;
+}
+
+/***simulate_prior***/
+Parameters simulate_prior(RandomNumberGenerator &rng)
+{
+  arma::mat X(2,1);
+  X(0,0) = 50.0;//rpois(rng,50.0);
+  X(1,0) = 100.0;//rpois(rng,100.0);
+  
+  Data data;
+  data["X"] = X;
+  return data;
+}
+
+/***simulate_transition_model***/
+Parameters simulate_transition_model(RandomNumberGenerator &rng,
+                                     const Parameters &parameters)
+{
+  arma::colvec theta = parameters["θ"];
+  double dt = parameters["dt"][0];
+  arma::mat X_mat = parameters["X"];
+  double X = X_mat(0,0);
+  double Y = X_mat(1,0);
+
+  arma::colvec next = my_stepLVc(rng,
+                                 X,
+                                 Y,
+                                 theta,
+                                 0.0,
+                                 dt);
+  
+  Data output;
+  arma::mat X_out(2,1);
+  X_out(0,0) = next[0];
+  X_out(1,0) = next[1];
+  output["X"] = X_out;
+  return output;
+}
+
+/***linear_gaussian_data_matrix***/
+arma::mat measurement_model_H_X(const Parameters &parameters)
+{
+  arma::mat H(2,2);
+  H(0,0) = 1.0;
+  H(1,1) = 1.0;
+  return H;
+}
+
+/***linear_gaussian_data_covariance***/
+arma::mat measurement_model_R_X(const Parameters &parameters)
+{
+  arma::mat R(2,2);
+  double epsilon = parameters["ε"][0];
+  R(0,0) = epsilon*epsilon;
+  R(1,1) = epsilon*epsilon;
+  return R;
+}
+
+/***linear_gaussian_data_state_variable***/
+std::string state_var_X()
+{
+  return "X";
+}
+
+/***linear_gaussian_data_variable***/
+std::string data_var_X()
+{
+  return "X";
+}
+
+// Arguments are:
+// name of index variable
+// first index
+// final index
+// name of time variable
+// initial time
+// time step variable
+// time step size
+// predictions per update
+/***filter,ilike::filter(i,0,15,t,0,dt,2,1)***/

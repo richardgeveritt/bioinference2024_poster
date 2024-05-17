@@ -1,0 +1,59 @@
+/***data***/
+Data data()
+{
+  arma::mat X(16,2);
+  X(0,0) = 50;
+  X(1,0) = 145;
+  X(2,0) = 265;
+  X(3,0) = 64;
+  X(4,0) = 35;
+  X(5,0) = 52;
+  X(6,0) = 201;
+  X(7,0) = 305;
+  X(8,0) = 26;
+  X(9,0) = 19;
+  X(10,0) = 90;
+  X(11,0) = 334;
+  X(12,0) = 61;
+  X(13,0) = 15;
+  X(14,0) = 24;
+  X(15,0) = 145;
+  
+  X(0,1) = 100;
+  X(1,1) = 93;
+  X(2,1) = 248;
+  X(3,1) = 341;
+  X(4,1) = 166;
+  X(5,1) = 79;
+  X(6,1) = 54;
+  X(7,1) = 331;
+  X(8,1) = 364;
+  X(9,1) = 129;
+  X(10,1) = 50;
+  X(11,1) = 137;
+  X(12,1) = 508;
+  X(13,1) = 194;
+  X(14,1) = 65;
+  X(15,1) = 40;
+  
+  Data data;
+  data["X"] = X;
+  return data;
+}
+
+/***simulate_prior***/
+Parameters simulate_prior(RandomNumberGenerator &rng)
+{
+  arma::colvec theta(3);
+  theta[0] = 1.0;
+  theta[1] = 0.005;
+  theta[2] = 0.6;
+  return Parameters("θ",theta);
+}
+
+// Arguments are:
+// file name for filter information
+// number of ensemble members (given as an argument in R)
+// shifter used in EnK (given as an argument in R)
+// number of EnKF iterations to store
+/***likelihood,ilike::ensemble_kalman_filter("filter_lv_XY.ilike",p1,p2,0)***/

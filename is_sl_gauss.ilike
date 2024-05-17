@@ -1,0 +1,45 @@
+/***data***/
+Data data()
+{
+  arma::colvec X(1);
+  X(0) = 0.0;
+  
+  Data data;
+  data["X"] = X;
+  return data;
+}
+
+/***evaluate_log_prior***/
+double evaluate_log_prior(const Parameters &parameters)
+{
+  return 0.0;
+}
+
+/***simulate_prior***/
+Parameters simulate_prior(RandomNumberGenerator &rng)
+{
+  arma::colvec theta(1);
+  theta[0] = 0.0;
+  return Parameters("θ",theta);
+}
+
+/***simulate_data_model***/
+Data simulate_data_model(RandomNumberGenerator &rng,
+                    const Parameters &parameters)
+{
+  double theta = parameters["θ"][0];
+  
+  Data output;
+  output["X"] = rnorm(rng,theta,1.0);
+  return output;
+}
+
+// Arguments are:
+// number of simulations from model (given as an argument in R)
+/***sbi_likelihood,ilike::sl(p1)***/
+
+/***data_variable***/
+std::string simulated_variable()
+{
+  return "X";
+}
