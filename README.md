@@ -7,7 +7,7 @@ To use the files in this directory, follow the instructions below.
 1. Install the ilike package using
 
    ```
-   devtools::install_github(“richardgeveritt/ilike")
+   devtools::install_github("richardgeveritt/ilike")
    ```
 
 2. Compile the desired model using, for example,
